@@ -33,12 +33,14 @@ participants =
     .map { |line| line.split("\t") }
 
 puts "Generating certificates for #{participants.size} participant(s)..."
-participants.each do |participant_name, participant_email|
-  participant_name = Transliterate.from_cyrillic(participant_name.strip)
+participants.each do |participant_first_name, participant_last_name, participant_email|
+  participant_first_name = Transliterate.from_cyrillic(participant_first_name.strip.capitalize)
+  participant_last_name = Transliterate.from_cyrillic(participant_last_name.strip.capitalize)
   participant_email = participant_email.strip.downcase
 
   result = Certificate.generate_for(
-    participant_name: participant_name,
+    participant_first_name: participant_first_name,
+    participant_last_name: participant_last_name,
     participant_email: participant_email,
     certificate_slug: "#{event_slug}-certificate-#{Digest::MD5.hexdigest(participant_email)}",
     event_name: event_name,
@@ -48,9 +50,9 @@ participants.each do |participant_name, participant_email|
   )
 
   if result
-    puts "Generated cert for #{participant_name} <#{participant_email}> at #{result}"
+    puts "Generated cert for #{participant_first_name} #{participant_last_name} <#{participant_email}> at #{result}"
   else
-    STDERR.puts "FAILED to generate cert for #{participant_name} <#{participant_email}>"
+    STDERR.puts "FAILED to generate cert for #{participant_first_name} #{participant_last_name} <#{participant_email}>"
     exit 2
   end
 end
