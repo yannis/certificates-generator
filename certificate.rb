@@ -2,7 +2,8 @@ module Certificate
   extend self
 
   def generate_for(
-    participant_name:,
+    participant_first_name:,
+    participant_last_name:,
     participant_email:,
     certificate_slug:,
     event_name:,
@@ -19,7 +20,8 @@ module Certificate
     resulting_certificate_path = "#{target_path}/#{certificate_slug}.pdf"
 
     variables = {
-      CERTIFICATE_HOLDER_NAME: participant_name,
+      CERTIFICATE_HOLDER_FIRST_NAME: participant_first_name,
+      CERTIFICATE_HOLDER_LAST_NAME: participant_last_name,
       EVENT_NAME: event_name,
       EVENT_DATE: event_date,
       EVENT_LOCATION: event_location,
